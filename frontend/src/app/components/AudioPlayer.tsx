@@ -13,10 +13,10 @@ import { Play, Pause, Volume2 } from "lucide-react";
 import { toast } from "sonner";
 
 const voices = [
-  { id: "voice-1", name: "Suara Narator 1" },
-  { id: "voice-2", name: "Suara Narator 2" },
-  { id: "voice-3", name: "Suara Anak-anak" },
-  { id: "voice-4", name: "Suara Orang Tua" },
+  { id: "voice-1", name: "Ardi" },
+  { id: "voice-2", name: "Gadis" },
+  { id: "voice-3", name: "Seraphine" },
+  { id: "voice-4", name: "Remy" },
 ];
 
 export const AudioPlayer = () => {
