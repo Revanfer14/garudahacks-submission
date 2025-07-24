@@ -1,4 +1,7 @@
+'use client';
+
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import {
   Card,
   CardContent,
@@ -8,10 +11,32 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { BookOpen, MapPin, Clock } from "lucide-react";
-import { DongengListItem, dongengList } from "../data/dongengData";
+import { BookOpen, MapPin, Clock, Loader2 } from "lucide-react";
+import { DongengListItem } from "../data/dongengData";
+import { getDongengList } from "../data/dongengService";
 
 export default function DongengPage() {
+  const [dongengList, setDongengList] = useState<DongengListItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadDongengs = async () => {
+      try {
+        setLoading(true);
+        const data = await getDongengList();
+        setDongengList(data);
+      } catch (err) {
+        setError('Failed to load dongeng data');
+        console.error('Error loading dongengs:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDongengs();
+  }, []);
+
   const getCategoryColor = (category: string) => {
     const colors: { [key: string]: string } = {
       Moral: "bg-terracotta-light text-terracotta-dark",
@@ -22,6 +47,33 @@ export default function DongengPage() {
     };
     return colors[category] || "bg-muted text-muted-foreground";
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Memuat dongeng...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-foreground mb-4">
+            Terjadi kesalahan
+          </h1>
+          <p className="text-muted-foreground mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()}>
+            Coba Lagi
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -51,10 +103,6 @@ export default function DongengPage() {
                     <Badge className={getCategoryColor(dongeng.category)}>
                       {dongeng.category}
                     </Badge>
-                    <div className="flex items-center text-sm text-muted-foreground">
-                      <Clock className="h-4 w-4 mr-1" />
-                      {dongeng.readTime}
-                    </div>
                   </div>
                   <CardTitle className="text-xl text-foreground group-hover:text-primary transition-gentle">
                     {dongeng.title}
