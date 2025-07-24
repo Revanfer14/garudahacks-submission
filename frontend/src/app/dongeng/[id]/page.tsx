@@ -21,16 +21,27 @@ const getCategoryColor = (category: string) => {
   return colors[category] || "bg-muted text-muted-foreground";
 };
 
-const DongengDetail = ({ params }: { params: { id: string } }) => {
+const DongengDetail = ({ params }: { params: Promise<{ id: string }> }) => {
   const [dongeng, setDongeng] = useState<Dongeng | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
 
   useEffect(() => {
+    const resolveParams = async () => {
+      const resolved = await params;
+      setResolvedParams(resolved);
+    };
+    resolveParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!resolvedParams) return;
+    
     const loadDongeng = async () => {
       try {
         setLoading(true);
-        const data = await getDongengById(params.id);
+        const data = await getDongengById(resolvedParams.id);
         setDongeng(data);
         if (!data) {
           setError('Dongeng tidak ditemukan');
@@ -44,7 +55,7 @@ const DongengDetail = ({ params }: { params: { id: string } }) => {
     };
 
     loadDongeng();
-  }, [params.id]);
+  }, [resolvedParams]);
 
   if (loading) {
     return (
@@ -100,7 +111,7 @@ const DongengDetail = ({ params }: { params: { id: string } }) => {
 
           {/* Audio Controls */}
           <div className="flex justify-center mt-8">
-            <AudioPlayer />
+            <AudioPlayer content={dongeng.content} />
           </div>
         </div>
       </section>

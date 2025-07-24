@@ -11,10 +11,19 @@ SPEECH_KEY = os.environ.get("AZURE_SPEECH_KEY")
 SPEECH_REGION = os.environ.get("AZURE_SPEECH_REGION")
 
 AVAILABLE_VOICES = {
-    "id-ID-GadisNeural": "Gadis (Indonesian - Neural Female)",
     "id-ID-ArdiNeural": "Ardi (Indonesian - Neural Male)",
+    "id-ID-GadisNeural": "Gadis (Indonesian - Neural Female)",
+    "fr-FR-Remy:DragonHDLatestNeural": "Remy (French - Dragon HD Latest Neural)",
     "de-DE-SeraphinaMultilingualNeural": "Seraphina (German Multilingual Neural)", 
 }
+
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify({"status": "healthy", "message": "TTS service is running"})
+
+@app.route('/voices', methods=['GET'])
+def get_voices():
+    return jsonify({"voices": AVAILABLE_VOICES})
 
 @app.route('/synthesize-speech', methods=['POST'])
 def synthesize_speech():
