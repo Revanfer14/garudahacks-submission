@@ -1,26 +1,150 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* Indonesian Hillside Village Design System - Earthy, serene, traditional tones */
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Core background - warm morning light */
+    --background: 45 35% 96%;
+    --foreground: 25 20% 15%;
+
+    /* Card surfaces - natural bamboo/thatch */
+    --card: 40 25% 92%;
+    --card-foreground: 25 20% 15%;
+
+    /* Popover surfaces */
+    --popover: 40 25% 92%;
+    --popover-foreground: 25 20% 15%;
+
+    /* Primary - rich terracotta earth */
+    --primary: 15 75% 45%;
+    --primary-foreground: 45 35% 96%;
+
+    /* Secondary - warm wood brown */
+    --secondary: 25 35% 75%;
+    --secondary-foreground: 25 30% 20%;
+
+    /* Muted - soft morning haze */
+    --muted: 40 20% 85%;
+    --muted-foreground: 25 15% 45%;
+
+    /* Accent - lush hillside green */
+    --accent: 120 40% 65%;
+    --accent-foreground: 25 20% 15%;
+
+    /* Destructive - sunset warning */
+    --destructive: 10 80% 55%;
+    --destructive-foreground: 45 35% 96%;
+
+    /* Borders and inputs - natural wood grain */
+    --border: 35 20% 80%;
+    --input: 35 20% 80%;
+    --ring: 15 75% 45%;
+
+    /* Indonesian-inspired custom tokens */
+    --terracotta-light: 15 65% 65%;
+    --terracotta-dark: 15 85% 35%;
+    --wood-light: 25 45% 85%;
+    --wood-medium: 25 35% 60%;
+    --wood-dark: 25 40% 25%;
+    --green-hills: 120 45% 55%;
+    --green-forest: 130 60% 35%;
+    --gold-sunrise: 45 85% 75%;
+    --gold-warm: 40 70% 85%;
+
+    /* Gradients for atmospheric effects */
+    --gradient-sunrise: linear-gradient(
+      135deg,
+      hsl(var(--gold-sunrise)),
+      hsl(var(--terracotta-light))
+    );
+    --gradient-hills: linear-gradient(
+      180deg,
+      hsl(var(--green-hills)),
+      hsl(var(--green-forest))
+    );
+    --gradient-earth: linear-gradient(
+      45deg,
+      hsl(var(--wood-medium)),
+      hsl(var(--terracotta-light))
+    );
+    --gradient-mist: linear-gradient(
+      90deg,
+      hsl(var(--gold-warm) / 0.3),
+      hsl(var(--muted) / 0.8)
+    );
+
+    /* Shadows with warm undertones */
+    --shadow-warm: 0 4px 20px -2px hsl(var(--terracotta-dark) / 0.15);
+    --shadow-earth: 0 8px 30px -4px hsl(var(--wood-dark) / 0.2);
+    --shadow-soft: 0 2px 12px -2px hsl(var(--muted) / 0.3);
+
+    /* Animations */
+    --transition-gentle: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    --transition-organic: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 0 0% 98%;
+
+    --sidebar-foreground: 240 5.3% 26.1%;
+
+    --sidebar-primary: 240 5.9% 10%;
+
+    --sidebar-primary-foreground: 0 0% 98%;
+
+    --sidebar-accent: 240 4.8% 95.9%;
+
+    --sidebar-accent-foreground: 240 5.9% 10%;
+
+    --sidebar-border: 220 13% 91%;
+
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  body {
+    @apply bg-background text-foreground;
+  }
 }
