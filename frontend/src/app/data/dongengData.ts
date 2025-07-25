@@ -6,16 +6,14 @@ export interface Dongeng {
   moral: string;
 }
 
-// Definisi tipe untuk item daftar dongeng (digunakan di DongengPage)
 export interface DongengListItem {
-  id: string; // Changed to string to match Firestore document IDs
+  id: string;
   title: string;
   region: string;
   description: string;
   category: string;
 }
 
-// Objek data dongeng lengkap (untuk halaman detail)
 export const dongengData: { [key: string]: Dongeng } = {
   "1": {
     title: "Malin Kundang",

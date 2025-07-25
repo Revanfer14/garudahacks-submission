@@ -1,11 +1,10 @@
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 import azure.cognitiveservices.speech as speechsdk
-import io
 import os
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 SPEECH_KEY = os.environ.get("AZURE_SPEECH_KEY")
 SPEECH_REGION = os.environ.get("AZURE_SPEECH_REGION")
@@ -32,7 +31,7 @@ def synthesize_speech():
 
     data = request.json
     text_to_synthesize = data.get('text')
-    voice_name = data.get('voice_name', 'id-ID-ArdiNeural') 
+    voice_name = data.get('voice_name', 'id-ID-ArdiNeural')
 
     if not text_to_synthesize:
         return jsonify({"error": "No text provided."}), 400
@@ -41,7 +40,6 @@ def synthesize_speech():
         return jsonify({"error": f"Invalid voice name: {voice_name}"}), 400
 
     speech_config = speechsdk.SpeechConfig(subscription=SPEECH_KEY, region=SPEECH_REGION)
-    
     speech_synthesizer = speechsdk.SpeechSynthesizer(speech_config=speech_config)
 
     ssml_string = f"""
@@ -56,8 +54,9 @@ def synthesize_speech():
         result = speech_synthesizer.speak_ssml_async(ssml_string).get()
 
         if result.reason == speechsdk.ResultReason.SynthesizingAudioCompleted:
-            audio_data = io.BytesIO(result.audio_data)
-            return send_file(audio_data, mimetype="audio/wav", as_attachment=False)
+            # Do not save or return audio file
+            print("Speech synthesis completed successfully.")
+            return jsonify({"success": True, "message": "Speech synthesized."})
         elif result.reason == speechsdk.ResultReason.Canceled:
             cancellation_details = result.cancellation_details
             print(f"Speech synthesis canceled: {cancellation_details.reason}")
