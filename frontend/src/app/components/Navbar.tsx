@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Home, Menu, X } from "lucide-react";
+import { BookOpen, Home, Menu, Send, X } from "lucide-react";
 import Image from "next/image";
 import logo from "@/assets/Asset 1.png";
 
@@ -39,6 +39,7 @@ export default function Navbar() {
   const navLinks = [
     { href: "/", label: "Beranda", icon: Home },
     { href: "/dongeng", label: "Dongeng", icon: BookOpen },
+    { href: "/request", label: "Permintaan", icon: Send },
   ];
 
   return (
@@ -91,11 +92,11 @@ export default function Navbar() {
 
       {/* Mobile Menu Panel */}
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-72 bg-background/80 backdrop-blur-lg p-6 shadow-lg transform transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed top-0 right-0 z-50 h-70 w-full bg-background/80 backdrop-blur-lg p-6 shadow-lg transform transition-transform duration-300 ease-in-out md:hidden rounded-lg ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold">Menu</h2>
           <Button
             onClick={() => setIsMenuOpen(false)}

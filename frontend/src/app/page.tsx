@@ -7,6 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookOpen } from "lucide-react";
 import heroImage from "@/assets/hero.jpg";
 import { features } from "./data/features";
+import { Separator } from "@/components/ui/separator";
 
 export default function HomePage() {
   return (
@@ -37,7 +38,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-foreground mb-8 drop-shadow-md"
+            className="text-xl md:text-2xl text-primary text-out font-bold mb-8 drop-shadow-md"
           >
             Menghidupkan Kembali Keajaiban Dongeng Nusantara untuk Generasi Kini
             dan Nanti.
@@ -108,7 +109,7 @@ export default function HomePage() {
       <section className="py-20 bg-wood-light/30">
         <div className="container max-w-4xl mx-auto px-6 text-center">
           <h2 className="text-4xl font-bold text-foreground mb-6">
-            Tentang Nusantara Stories
+            Tentang Nusakatha
           </h2>
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
             Indonesia memiliki ribuan dongeng dan cerita rakyat yang mengandung
@@ -118,9 +119,15 @@ export default function HomePage() {
             tunanetra melalui fitur text-to-speech.
           </p>
 
-          <Link href="/dongeng">
+          <Separator className="my-4" />
+
+          <p className="text-lg font-bold text-muted-foreground mt-10 mb-4 leading-relaxed">
+            Mau dengar cerita apa lagi?
+          </p>
+
+          <Link href="/request">
             <Button variant="earth" size="lg">
-              Mulai Membaca Dongeng
+              Request Dongeng
             </Button>
           </Link>
         </div>
