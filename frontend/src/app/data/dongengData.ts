@@ -2,18 +2,28 @@ export interface Dongeng {
   title: string;
   region: string;
   category: string;
+<<<<<<< HEAD
   readTime: string;
+=======
+>>>>>>> origin/backend
   content: string;
   moral: string;
 }
 
 // Definisi tipe untuk item daftar dongeng (digunakan di DongengPage)
 export interface DongengListItem {
+<<<<<<< HEAD
   id: number;
   title: string;
   region: string;
   description: string;
   readTime: string;
+=======
+  id: string; // Changed to string to match Firestore document IDs
+  title: string;
+  region: string;
+  description: string;
+>>>>>>> origin/backend
   category: string;
 }
 
@@ -23,7 +33,10 @@ export const dongengData: { [key: string]: Dongeng } = {
     title: "Malin Kundang",
     region: "Sumatra Barat",
     category: "Moral",
+<<<<<<< HEAD
     readTime: "8 menit",
+=======
+>>>>>>> origin/backend
     content: `Di sebuah desa nelayan di pesisir Sumatra Barat, hiduplah seorang janda miskin bernama Mande Rubayah bersama anak laki-lakinya yang bernama Malin Kundang. Meski hidup dalam kemiskinan, sang ibu sangat menyayangi Malin dan selalu berusaha memberikan yang terbaik untuknya.
 
 Suatu hari, Malin yang sudah beranjak dewasa memutuskan untuk merantau ke negeri seberang untuk mengubah nasib keluarganya. Dengan berat hati, ibunya melepas kepergian Malin setelah memberikan doa dan restu.
@@ -52,7 +65,10 @@ Hingga kini, batu yang konon adalah Malin Kundang masih dapat dilihat di pantai 
     title: "Sangkuriang",
     region: "Jawa Barat",
     category: "Legenda",
+<<<<<<< HEAD
     readTime: "12 menit",
+=======
+>>>>>>> origin/backend
     content: `Dahulu kala, di tanah Pasundan hiduplah seorang raja yang memiliki putri cantik bernama Dayang Sumbi. Putri ini memiliki kesaktian yang luar biasa dan awet muda.
 
 Suatu hari, ketika sedang menenun, kelos benangnya jatuh. Karena malas turun untuk mengambilnya, ia bersumpah: "Barangsiapa yang mengambilkan kelos benangku, jika laki-laki akan kujadikan suami, jika perempuan akan kujadikan saudara."
@@ -86,47 +102,80 @@ Itulah asal-usul Gunung Tangkuban Perahu yang bentuknya menyerupai perahu terbal
 // Array data daftar dongeng (untuk halaman daftar)
 export const dongengList: DongengListItem[] = [
   {
+<<<<<<< HEAD
     id: 1,
+=======
+    id: "1",
+>>>>>>> origin/backend
     title: "Malin Kundang",
     region: "Sumatra Barat",
     description:
       "Kisah seorang anak yang durhaka kepada ibunya dan mendapat kutukan menjadi batu.",
+<<<<<<< HEAD
     readTime: "8 menit",
     category: "Moral",
   },
   {
     id: 2,
+=======
+    category: "Moral",
+  },
+  {
+    id: "2",
+>>>>>>> origin/backend
     title: "Sangkuriang",
     region: "Jawa Barat",
     description:
       "Legenda tentang asal-usul Gunung Tangkuban Perahu dan danau Bandung.",
+<<<<<<< HEAD
     readTime: "12 menit",
     category: "Legenda",
   },
   {
     id: 3,
+=======
+    category: "Legenda",
+  },
+  {
+    id: "3",
+>>>>>>> origin/backend
     title: "Roro Jonggrang",
     region: "Jawa Tengah",
     description:
       "Cerita cinta yang tragis antara Roro Jonggrang dan Bandung Bondowoso.",
+<<<<<<< HEAD
     readTime: "15 menit",
     category: "Legenda",
   },
   {
     id: 4,
+=======
+    category: "Legenda",
+  },
+  {
+    id: "4",
+>>>>>>> origin/backend
     title: "Timun Mas",
     region: "Jawa Tengah",
     description:
       "Petualangan seorang gadis bernama Timun Mas yang melarikan diri dari raksasa.",
+<<<<<<< HEAD
     readTime: "10 menit",
     category: "Petualangan",
   },
   {
     id: 5,
+=======
+    category: "Petualangan",
+  },
+  {
+    id: "5",
+>>>>>>> origin/backend
     title: "Keong Mas",
     region: "Jawa Timur",
     description:
       "Kisah seorang putri yang dikutuk menjadi keong emas oleh ibu tirinya.",
+<<<<<<< HEAD
     readTime: "9 menit",
     category: "Fantasi",
   },
@@ -136,6 +185,15 @@ export const dongengList: DongengListItem[] = [
     region: "Kalimantan",
     description: "Kecerdikan Si Kancil dalam mengakali buaya-buaya yang lapar.",
     readTime: "6 menit",
+=======
+    category: "Fantasi",
+  },
+  {
+    id: "6",
+    title: "Si Kancil dan Buaya",
+    region: "Kalimantan",
+    description: "Kecerdikan Si Kancil dalam mengakali buaya-buaya yang lapar.",
+>>>>>>> origin/backend
     category: "Fabel",
   },
 ];

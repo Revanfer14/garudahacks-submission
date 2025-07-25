@@ -1,9 +1,13 @@
+'use client';
+
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, MapPin, Clock, Volume2 } from "lucide-react";
-import { dongengData, Dongeng } from "@/app/data/dongengData";
+import { ArrowLeft, MapPin, Clock, Volume2, Loader2 } from "lucide-react";
+import { Dongeng } from "@/app/data/dongengData";
+import { getDongengById } from "@/app/data/dongengService";
 import { AudioPlayer } from "@/app/components/AudioPlayer";
 
 const getCategoryColor = (category: string) => {
@@ -17,15 +21,59 @@ const getCategoryColor = (category: string) => {
   return colors[category] || "bg-muted text-muted-foreground";
 };
 
-const DongengDetail = ({ params }: { params: { id: string } }) => {
-  const dongeng: Dongeng | undefined = dongengData[params.id];
+const DongengDetail = ({ params }: { params: Promise<{ id: string }> }) => {
+  const [dongeng, setDongeng] = useState<Dongeng | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
 
-  if (!dongeng) {
+  useEffect(() => {
+    const resolveParams = async () => {
+      const resolved = await params;
+      setResolvedParams(resolved);
+    };
+    resolveParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!resolvedParams) return;
+    
+    const loadDongeng = async () => {
+      try {
+        setLoading(true);
+        const data = await getDongengById(resolvedParams.id);
+        setDongeng(data);
+        if (!data) {
+          setError('Dongeng tidak ditemukan');
+        }
+      } catch (err) {
+        setError('Failed to load dongeng');
+        console.error('Error loading dongeng:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadDongeng();
+  }, [resolvedParams]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+          <p className="text-muted-foreground">Memuat dongeng...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error || !dongeng) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">
-            Dongeng tidak ditemukan
+            {error || 'Dongeng tidak ditemukan'}
           </h1>
           <Button asChild>
             <Link href="/dongeng">Kembali ke Daftar Dongeng</Link>
@@ -55,10 +103,6 @@ const DongengDetail = ({ params }: { params: { id: string } }) => {
               <MapPin className="h-4 w-4 mr-1" />
               {dongeng.region}
             </div>
-            <div className="flex items-center text-sm text-wood-dark">
-              <Clock className="h-4 w-4 mr-1" />
-              {dongeng.readTime}
-            </div>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -67,7 +111,7 @@ const DongengDetail = ({ params }: { params: { id: string } }) => {
 
           {/* Audio Controls */}
           <div className="flex justify-center mt-8">
-            <AudioPlayer />
+            <AudioPlayer content={dongeng.content} />
           </div>
         </div>
       </section>
