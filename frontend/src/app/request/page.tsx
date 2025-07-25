@@ -1,32 +1,37 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { firestore } from "../../lib/firebase.js"
-import { collection, addDoc } from "firebase/firestore"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen, Sparkles, Send } from "lucide-react"
+import { useState } from "react";
+import { firestore } from "../../lib/firebase.js";
+import { collection, addDoc } from "firebase/firestore";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { BookOpen, Sparkles, Send } from "lucide-react";
 
 export default function RequestPage() {
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [requesterName, setRequesterName] = useState("")
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState("")
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [requesterName, setRequesterName] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState("");
 
-  const ref = collection(firestore, "requests")
+  const ref = collection(firestore, "requests");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setLoading(true)
-    setError("")
-    setSuccess(false)
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess(false);
 
     try {
       await addDoc(ref, {
@@ -34,17 +39,20 @@ export default function RequestPage() {
         description,
         requesterName,
         createdAt: new Date().toISOString(),
-      })
-      setSuccess(true)
-      setTitle("")
-      setDescription("")
-      setRequesterName("")
+      });
+      setSuccess(true);
+      setTitle("");
+      setDescription("");
+      setRequesterName("");
     } catch (err) {
-      setError("Gagal mengirim permintaan. Silakan coba lagi.")
+      setError(
+        "Gagal mengirim permintaan. Silakan coba lagi. Error: " +
+          (err as Error).message
+      );
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-background py-12 px-4 text-foreground">
@@ -57,17 +65,21 @@ export default function RequestPage() {
               <Sparkles className="h-6 w-6 text-accent absolute -top-1 -right-1" />
             </div>
           </div>
-          <h1 className="text-4xl font-bold text-foreground mb-2">Permintaan Dongeng</h1>
+          <h1 className="text-4xl font-bold text-foreground mb-2">
+            Permintaan Dongeng
+          </h1>
           <p className="text-lg text-muted-foreground max-w-md mx-auto">
-            Punya ide dongeng yang ingin diceritakan? Kirimkan permintaanmu dan kami akan membuatkan dongeng yang
-            menarik untukmu!
+            Punya ide dongeng yang ingin diceritakan? Kirimkan permintaanmu dan
+            kami akan membuatkan dongeng yang menarik untukmu!
           </p>
         </div>
 
         {/* Main Form Card */}
         <Card className="shadow-soft border border-border bg-card/90 text-card-foreground">
           <CardHeader className="text-center pb-6">
-            <CardTitle className="text-2xl text-foreground">Ceritakan Ide Dongengmu</CardTitle>
+            <CardTitle className="text-2xl text-foreground">
+              Ceritakan Ide Dongengmu
+            </CardTitle>
             <CardDescription className="text-base text-muted-foreground">
               Isi formulir di bawah ini dengan detail dongeng yang kamu inginkan
             </CardDescription>
@@ -77,7 +89,10 @@ export default function RequestPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Requester Name */}
               <div className="space-y-2">
-                <Label htmlFor="requesterName" className="text-base font-medium text-foreground">
+                <Label
+                  htmlFor="requesterName"
+                  className="text-base font-medium text-foreground"
+                >
                   Nama Kamu
                 </Label>
                 <Input
@@ -92,7 +107,10 @@ export default function RequestPage() {
 
               {/* Title */}
               <div className="space-y-2">
-                <Label htmlFor="title" className="text-base font-medium text-foreground">
+                <Label
+                  htmlFor="title"
+                  className="text-base font-medium text-foreground"
+                >
                   Judul Dongeng <span className="text-red-700">*</span>
                 </Label>
                 <Input
@@ -134,7 +152,8 @@ export default function RequestPage() {
                     Permintaan berhasil dikirim!
                   </div>
                   <p className="text-green-600 text-sm mt-1">
-                    Terima kasih! Kami akan segera memproses permintaan dongengmu.
+                    Terima kasih! Kami akan segera memproses permintaan
+                    dongengmu.
                   </p>
                 </div>
               )}
@@ -152,11 +171,11 @@ export default function RequestPage() {
         {/* Footer Info */}
         <div className="text-center mt-8 text-muted-foreground">
           <p className="text-sm">
-            💡 <strong>Tips:</strong> Semakin detail deskripsi yang kamu berikan, semakin menarik dongeng yang akan kami
-            buat!
+            💡 <strong>Tips:</strong> Semakin detail deskripsi yang kamu
+            berikan, semakin menarik dongeng yang akan kami buat!
           </p>
         </div>
       </div>
     </div>
-  )
+  );
 }

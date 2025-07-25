@@ -49,7 +49,13 @@ export default function Navbar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
             <div className="flex gap-3 lg:gap-4 items-center">
-              <Image src={logo} width={40} height={40} alt="Logo" />
+              <Image
+                src={logo}
+                width={40}
+                height={40}
+                className="transform scale-x-[-1]"
+                alt="Logo"
+              />
               <h1 className="text-2xl font-bold text-foreground">Nusakatha</h1>
             </div>
           </Link>

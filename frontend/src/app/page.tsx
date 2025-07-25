@@ -30,15 +30,15 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-5xl md:text-7xl font-bold text-foreground mb-6 drop-shadow-lg"
+            className="text-5xl md:text-7xl font-bold text-primary mb-6 drop-shadow-lg"
           >
-            Nusantara Stories
+            Nusakatha
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-primary text-out font-bold mb-8 drop-shadow-md"
+            className="text-xl md:text-2xl text-foreground font-bold mb-8 drop-shadow-lg text-outline-primary transition-all duration-300"
           >
             Menghidupkan Kembali Keajaiban Dongeng Nusantara untuk Generasi Kini
             dan Nanti.
@@ -47,13 +47,13 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col items-center sm:flex-row gap-4 justify-center"
           >
             <Link href="/dongeng" passHref>
               <Button
                 size="lg"
                 variant="village"
-                className="flex items-center gap-2"
+                className="flex justify-center items-center gap-2"
               >
                 <BookOpen className="h-5 w-5" />
                 Jelajahi Dongeng
