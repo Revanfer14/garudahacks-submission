@@ -5,7 +5,7 @@ import io
 import os
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 SPEECH_KEY = os.environ.get("AZURE_SPEECH_KEY")
 SPEECH_REGION = os.environ.get("AZURE_SPEECH_REGION")

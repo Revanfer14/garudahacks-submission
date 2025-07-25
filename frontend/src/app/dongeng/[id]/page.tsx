@@ -1,11 +1,11 @@
-'use client';
+"use client";
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ArrowLeft, MapPin, Clock, Volume2, Loader2 } from "lucide-react";
+import { ArrowLeft, MapPin, Volume2, Loader2 } from "lucide-react";
 import { Dongeng } from "@/app/data/dongengData";
 import { getDongengById } from "@/app/data/dongengService";
 import { AudioPlayer } from "@/app/components/AudioPlayer";
@@ -25,7 +25,9 @@ const DongengDetail = ({ params }: { params: Promise<{ id: string }> }) => {
   const [dongeng, setDongeng] = useState<Dongeng | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
+  const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(
+    null
+  );
 
   useEffect(() => {
     const resolveParams = async () => {
@@ -37,18 +39,18 @@ const DongengDetail = ({ params }: { params: Promise<{ id: string }> }) => {
 
   useEffect(() => {
     if (!resolvedParams) return;
-    
+
     const loadDongeng = async () => {
       try {
         setLoading(true);
         const data = await getDongengById(resolvedParams.id);
         setDongeng(data);
         if (!data) {
-          setError('Dongeng tidak ditemukan');
+          setError("Dongeng tidak ditemukan");
         }
       } catch (err) {
-        setError('Failed to load dongeng');
-        console.error('Error loading dongeng:', err);
+        setError("Failed to load dongeng");
+        console.error("Error loading dongeng:", err);
       } finally {
         setLoading(false);
       }
@@ -73,7 +75,7 @@ const DongengDetail = ({ params }: { params: Promise<{ id: string }> }) => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">
-            {error || 'Dongeng tidak ditemukan'}
+            {error || "Dongeng tidak ditemukan"}
           </h1>
           <Button asChild>
             <Link href="/dongeng">Kembali ke Daftar Dongeng</Link>
