@@ -1,20 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Home, List, Menu, X } from "lucide-react";
+import { BookOpen, Home, Menu, X } from "lucide-react";
+import Image from "next/image";
+import logo from "@/assets/Asset 1.png";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).position;
+    const scrollY = window.scrollY;
+
+    if (isMenuOpen) {
+      document.body.classList.add("menu-open");
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.width = "100%";
+    }
+
+    return () => {
+      if (isMenuOpen) {
+        document.body.classList.remove("menu-open");
+        document.body.style.position = originalStyle;
+        document.body.style.top = "";
+        document.body.style.width = "";
+        window.scrollTo(0, scrollY);
+      }
+    };
+  }, [isMenuOpen]);
+
   const isActive = (path: string) => pathname === path;
 
   const navLinks = [
     { href: "/", label: "Beranda", icon: Home },
-    { href: "/dongeng", label: "Dongeng", icon: List },
+    { href: "/dongeng", label: "Dongeng", icon: BookOpen },
   ];
 
   return (
@@ -23,14 +47,9 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="p-2 bg-gradient-earth rounded-xl shadow-warm transition-all duration-300 group-hover:scale-105">
-              <BookOpen className="h-6 w-6 text-primary-foreground" />
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-foreground">
-                Nusantara Stories
-              </h1>
-              <p className="text-sm text-muted-foreground">Dongeng Indonesia</p>
+            <div className="flex gap-3 lg:gap-4 items-center">
+              <Image src={logo} width={40} height={40} alt="Logo" />
+              <h1 className="text-2xl font-bold text-foreground">Nusakatha</h1>
             </div>
           </Link>
 
@@ -72,7 +91,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Panel */}
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-72 bg-background p-6 shadow-lg transform transition-transform duration-300 ease-in-out md:hidden ${
+        className={`fixed top-0 right-0 z-50 h-full w-72 bg-background/80 backdrop-blur-lg p-6 shadow-lg transform transition-transform duration-300 ease-in-out md:hidden ${
           isMenuOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
@@ -86,11 +105,15 @@ export default function Navbar() {
             <X className="h-6 w-6" />
           </Button>
         </div>
-        <div className="flex flex-col space-y-3">
+        <div className="flex flex-col space-y-3 ">
           {navLinks.map((link) => (
-            <Link key={link.href} href={link.href} onClick={() => setIsMenuOpen(false)}>
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsMenuOpen(false)}
+            >
               <Button
-                variant={isActive(link.href) ? "secondary" : "ghost"}
+                variant={isActive(link.href) ? "secondary" : "secondary"}
                 className="w-full justify-start flex items-center gap-3 text-md"
               >
                 <link.icon className="h-5 w-5" />

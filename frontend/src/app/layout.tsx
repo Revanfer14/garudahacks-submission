@@ -20,11 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" className={inter.className}>
+      <body>
         <Navbar />
-        {children}
-        <Toaster />
+        <main id="main-content">{children}</main>
+        <Toaster position="top-right" richColors />
       </body>
     </html>
   );

@@ -1,21 +1,23 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { BookOpen, Volume2 } from "lucide-react";
-import heroImage from "@/assets/hero-village.jpg";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { BookOpen } from "lucide-react";
+import heroImage from "@/assets/hero.jpg";
 import { features } from "./data/features";
 
 export default function HomePage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      <motion.section
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="relative h-screen flex items-center justify-center overflow-hidden"
+      >
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroImage.src})` }}
@@ -23,36 +25,42 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-mist" />
 
         <div className="relative z-10 text-center max-w-4xl px-6">
-          <h1 className="text-5xl md:text-7xl font-bold text-foreground mb-6 drop-shadow-lg">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-5xl md:text-7xl font-bold text-foreground mb-6 drop-shadow-lg"
+          >
             Nusantara Stories
-          </h1>
-          <p className="text-xl md:text-2xl text-wood-dark mb-8 drop-shadow-md">
-            Melestarikan dongeng dan budaya Indonesia untuk generasi masa depan
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/dongeng" passHref>
-              <Button
-                size="lg"
-                variant="default"
-                className="flex items-center gap-2"
-              >
-                <BookOpen className="h-5 w-5" />
-                Jelajahi Dongeng
-              </Button>
-            </Link>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="text-xl md:text-2xl text-foreground mb-8 drop-shadow-md"
+          >
+            Menghidupkan Kembali Keajaiban Dongeng Nusantara untuk Generasi Kini
+            dan Nanti.
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="flex flex-col sm:flex-row gap-4 justify-center"
+          >
             <Link href="/dongeng" passHref>
               <Button
                 size="lg"
                 variant="village"
                 className="flex items-center gap-2"
               >
-                <Volume2 className="h-5 w-5" />
-                Dengarkan Cerita
+                <BookOpen className="h-5 w-5" />
+                Jelajahi Dongeng
               </Button>
             </Link>
-          </div>
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Features Section */}
       <section className="py-20 bg-background">
@@ -70,24 +78,27 @@ export default function HomePage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
-              <Card
+              <motion.div
                 key={index}
-                className="border-border shadow-soft hover:shadow-warm transition-organic"
+                initial={{ opacity: 0, y: 50, scale: 0.9 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <CardHeader className="text-center">
-                  <div className="mx-auto mb-4 p-3 bg-gradient-earth rounded-full w-fit">
-                    <feature.icon className="h-6 w-6 text-primary-foreground" />
-                  </div>
-                  <CardTitle className="text-xl text-foreground">
-                    {feature.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-center text-muted-foreground">
-                    {feature.description}
-                  </CardDescription>
-                </CardContent>
-              </Card>
+                <Card className="border-border shadow-soft hover:shadow-warm transition-organic h-full">
+                  <CardHeader>
+                    <div className="p-3 bg-gradient-earth rounded-lg inline-block mb-4 shadow-warm">
+                      <feature.icon className="h-6 w-6 text-primary-foreground" />
+                    </div>
+                    <CardTitle>{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground">
+                      {feature.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>

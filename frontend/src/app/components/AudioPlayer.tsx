@@ -10,19 +10,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Play,
-  Pause,
-  Volume2,
-  Loader2,
-  AlertCircle,
-  Square,
-  VolumeX,
-} from "lucide-react";
+import { Play, Pause, Loader2, AlertCircle, Square } from "lucide-react";
 import { toast } from "sonner";
 
 interface AudioPlayerProps {
   content: string;
+  title: string; // Add title prop
 }
 
 const voices = [
@@ -32,17 +25,13 @@ const voices = [
   { id: "fr-FR-Remy:DragonHDLatestNeural", name: "Remy" },
 ];
 
-export const AudioPlayer = ({ content }: AudioPlayerProps) => {
+export const AudioPlayer = ({ content, title }: AudioPlayerProps) => {
   type PlayerState = "stopped" | "loading" | "playing" | "paused";
 
   const [playerState, setPlayerState] = useState<PlayerState>("stopped");
   const [selectedVoice, setSelectedVoice] = useState(voices[0].id);
   const [serverError, setServerError] = useState(false);
-  const [volume, setVolume] = useState(0.8);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
-  const [downloadedAudioUrl, setDownloadedAudioUrl] = useState<string | null>(
-    null
-  );
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
 
@@ -53,75 +42,55 @@ export const AudioPlayer = ({ content }: AudioPlayerProps) => {
       audioRef.current.pause();
       audioRef.current.removeAttribute("src"); // Remove the src to ensure it stops loading
     }
-    if (audioUrl) {
-      URL.revokeObjectURL(audioUrl);
-      setAudioUrl(null);
-    }
+    setAudioUrl(null);
     setCurrentTime(0);
     setDuration(0);
-  }, [audioUrl]);
-
-  const getAudioFilePath = (title: string, voice: string) => {
-    let dongengName = title
-      .split(/\s+/)
-      .slice(0, 5)
-      .join("_")
-      .replace(/[^a-zA-Z0-9_]/g, "");
-    if (!dongengName) dongengName = "dongeng";
-    const voiceName = voice.replace(/[^a-zA-Z0-9_]/g, "");
-    return `/audio/${dongengName}-${voiceName}.wav`;
-  };
+  }, []);
 
   const handlePlay = async () => {
     if (serverError) {
       toast.error("Server TTS tidak tersedia. Pastikan backend berjalan.");
       return;
     }
+
     if (playerState !== "stopped") {
       cleanupAudio();
     }
+
     setPlayerState("loading");
-    const audioPath = getAudioFilePath(content, selectedVoice);
-    // Check if file exists in public/audio
-    try {
-      const res = await fetch(audioPath);
-      if (res.ok) {
-        setAudioUrl(audioPath);
-        setDownloadedAudioUrl(audioPath);
-        setPlayerState("stopped");
-        toast.success(`Audio ditemukan di lokal: ${audioPath}`);
-        return;
-      }
-    } catch {}
-    // If not found, request TTS from backend
+
     try {
       const response = await fetch("http://localhost:5000/synthesize-speech", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: content, voice_name: selectedVoice }),
+        body: JSON.stringify({
+          text: content,
+          voice_name: selectedVoice,
+          title: title,
+        }),
       });
-      if (!response.ok) throw new Error(`Server error: ${response.statusText}`);
-      // Get audio from Azure (simulate download)
-      const audioBlob = await response.blob();
-      // Save to public/audio using download hack
-      const url = window.URL.createObjectURL(audioBlob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = audioPath.split("/").pop() || "audio.wav";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-      // Wait for user to save, then play from local
-      setTimeout(() => {
-        setAudioUrl(audioPath);
-        setDownloadedAudioUrl(audioPath);
-        setPlayerState("stopped");
-        toast.success(`Audio berhasil dibuat dan disimpan: ${audioPath}`);
-      }, 1000);
-    } catch (error) {
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || `Server error: ${response.statusText}`
+        );
+      }
+
+      const data = await response.json();
+      if (data.success && data.audio_url) {
+        setAudioUrl(data.audio_url);
+        toast.success("Audio siap untuk diputar.");
+      } else {
+        throw new Error(data.message || "Gagal mendapatkan audio URL.");
+      }
+    } catch (error: unknown) {
       console.error("Error synthesizing speech:", error);
-      toast.error("Gagal membuat audio. Periksa koneksi ke server.");
+      const errorMessage =
+        typeof error === "object" && error !== null && "message" in error
+          ? String((error as { message?: string }).message)
+          : "Gagal membuat audio. Periksa koneksi ke server.";
+      toast.error(errorMessage);
       setPlayerState("stopped");
       cleanupAudio();
     }
@@ -132,33 +101,21 @@ export const AudioPlayer = ({ content }: AudioPlayerProps) => {
     cleanupAudio();
   };
 
-  const handleVolumeChange = (value: number[]) => {
-    const newVolume = value[0];
-    setVolume(newVolume);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume;
-    }
-  };
-
   const handleSeek = (value: number[]) => {
     if (audioRef.current) {
       audioRef.current.currentTime = value[0];
     }
   };
 
-  // Use the downloaded audio for playback, don't fetch again if already downloaded for this dongeng and voice
   const handleMainButtonClick = () => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (downloadedAudioUrl && audioUrl === downloadedAudioUrl) {
-      if (playerState === "playing") {
-        audio.pause();
-      } else if (playerState === "paused") {
-        audio.play();
-      } else if (playerState === "stopped") {
-        setAudioUrl(downloadedAudioUrl);
-      }
-    } else {
+
+    if (playerState === "playing") {
+      audio.pause();
+    } else if (playerState === "paused") {
+      audio.play();
+    } else if (playerState === "stopped") {
       handlePlay();
     }
   };
@@ -211,7 +168,13 @@ export const AudioPlayer = ({ content }: AudioPlayerProps) => {
       </div>
 
       <Select
-        onValueChange={setSelectedVoice}
+        onValueChange={(value) => {
+          if (playerState !== "stopped") {
+            handleStop();
+          }
+          setAudioUrl(null);
+          setSelectedVoice(value);
+        }}
         defaultValue={selectedVoice}
         disabled={playerState !== "stopped"}
       >
@@ -231,7 +194,7 @@ export const AudioPlayer = ({ content }: AudioPlayerProps) => {
         <Button
           onClick={handleMainButtonClick}
           size="icon"
-          disabled={!content.trim() && playerState === "stopped"}
+          disabled={(!content.trim() && playerState === "stopped") || !title}
         >
           {playerState === "loading" && (
             <Loader2 className="h-6 w-6 animate-spin" />
@@ -252,19 +215,6 @@ export const AudioPlayer = ({ content }: AudioPlayerProps) => {
       </div>
 
       <div className="flex items-center gap-3">
-        <VolumeX className="h-5 w-5 text-muted-foreground" />
-        <Slider
-          value={[volume]}
-          onValueChange={handleVolumeChange}
-          max={1}
-          step={0.05}
-          className="w-full"
-          disabled={playerState === "stopped"}
-        />
-        <Volume2 className="h-5 w-5 text-muted-foreground" />
-      </div>
-
-      <div className="flex items-center gap-3">
         <span className="text-xs text-muted-foreground">
           {Math.floor(currentTime)}s
         </span>
@@ -282,24 +232,32 @@ export const AudioPlayer = ({ content }: AudioPlayerProps) => {
         </span>
       </div>
 
-      {/* FIX: The <audio> element is now the single source of truth for player state */}
+      {/* The <audio> element is the single source of truth for player state */}
       <audio
         ref={audioRef}
         src={audioUrl ?? undefined}
         onPlay={() => setPlayerState("playing")}
         onPause={() => {
-          // Only set to 'paused' if it's not being stopped intentionally
           if (playerState !== "stopped") {
             setPlayerState("paused");
           }
         }}
-        onEnded={() => setPlayerState("stopped")}
+        onEnded={handleStop}
         onCanPlay={() => {
-          // When audio is ready, and we are in a 'loading' state, play it.
-          if (audioRef.current && playerState === "loading") {
+          if (
+            audioRef.current &&
+            (playerState === "loading" ||
+              (playerState === "stopped" && audioUrl))
+          ) {
             audioRef.current.play();
-            toast.success("Audio sedang diputar...");
           }
+        }}
+        onError={() => {
+          toast.error(
+            "Gagal memuat audio. File mungkin tidak ditemukan atau rusak."
+          );
+          setPlayerState("stopped");
+          cleanupAudio();
         }}
         style={{ display: "none" }}
       />

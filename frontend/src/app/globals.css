@@ -148,3 +148,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+#main-content {
+  transition: filter 0.3s ease-in-out;
+}
+
+.menu-open #main-content {
+  filter: blur(4px);
+}

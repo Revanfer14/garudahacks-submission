@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -86,9 +87,19 @@ const DongengDetail = ({ params }: { params: Promise<{ id: string }> }) => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="min-h-screen bg-background"
+    >
       {/* Header */}
-      <section className="bg-gradient-sunrise py-8">
+      <motion.section
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.2 }}
+        className="py-12 bg-gradient-mist"
+      >
         <div className="container max-w-4xl mx-auto px-6">
           <Button variant="ghost" asChild className="mb-4">
             <Link href="/dongeng">
@@ -112,61 +123,69 @@ const DongengDetail = ({ params }: { params: Promise<{ id: string }> }) => {
           </h1>
 
           {/* Audio Controls */}
-          <div className="flex justify-center mt-8">
-            <AudioPlayer content={dongeng.content} />
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="flex justify-center mt-8"
+          >
+            <AudioPlayer content={dongeng.content} title={dongeng.title} />
+          </motion.div>
         </div>
-      </section>
+      </motion.section>
 
       {/* Content */}
-      <section className="py-12">
-        <div className="container max-w-4xl mx-auto px-6">
-          <Card className="shadow-warm border-border">
-            <CardHeader>
-              <CardTitle className="text-2xl text-foreground flex items-center gap-2">
-                <Volume2 className="h-6 w-6 text-primary" />
-                Isi Dongeng
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="prose prose-lg max-w-none">
-                {dongeng.content
-                  .split("\n\n")
-                  .map((paragraph: string, index: number) => (
-                    <p
-                      key={index}
-                      className="mb-4 text-foreground leading-relaxed"
-                    >
-                      {paragraph}
-                    </p>
-                  ))}
-              </div>
-            </CardContent>
-          </Card>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.4 }}
+        className="container max-w-4xl mx-auto px-6 py-8"
+      >
+        <Card className="shadow-warm border-border">
+          <CardHeader>
+            <CardTitle className="text-2xl text-foreground flex items-center gap-2">
+              <Volume2 className="h-6 w-6 text-primary" />
+              Isi Dongeng
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="prose prose-lg max-w-none">
+              {dongeng.content
+                .split("\n\n")
+                .map((paragraph: string, index: number) => (
+                  <p
+                    key={index}
+                    className="mb-4 text-foreground leading-relaxed"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
+            </div>
+          </CardContent>
+        </Card>
 
-          {/* Moral */}
-          <Card className="mt-8 shadow-soft border-border bg-wood-light/20">
-            <CardHeader>
-              <CardTitle className="text-xl text-foreground">
-                Pesan Moral
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground leading-relaxed">
-                {dongeng.moral}
-              </p>
-            </CardContent>
-          </Card>
+        {/* Moral */}
+        <Card className="mt-8 shadow-soft border-border bg-wood-light/20">
+          <CardHeader>
+            <CardTitle className="text-xl text-foreground">
+              Pesan Moral
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-muted-foreground leading-relaxed">
+              {dongeng.moral}
+            </p>
+          </CardContent>
+        </Card>
 
-          {/* Navigation */}
-          <div className="flex justify-center mt-12">
-            <Button variant="earth" asChild>
-              <Link href="/dongeng">Baca Dongeng Lainnya</Link>
-            </Button>
-          </div>
+        {/* Navigation */}
+        <div className="flex justify-center mt-12">
+          <Button variant="earth" asChild>
+            <Link href="/dongeng">Baca Dongeng Lainnya</Link>
+          </Button>
         </div>
-      </section>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 
