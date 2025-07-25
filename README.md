@@ -1,53 +1,15 @@
-# Dongeng TTS Integration Setup
+# Nusakatha 🇮🇩
+## Listen to the Archipelago's Whispers. A digital library of Indonesian fairy tales, made accessible for everyone.
 
-## How to run the complete application:
+Welcome to Nusakhata, a heartfelt project dedicated to preserving and sharing the rich tapestry of Indonesian folklore. Our mission is to connect people with the archipelago's cultural heritage through stories, language, and shared experiences, embodying the spirit of "Bhinneka Tunggal Ika" (Unity in Diversity).
 
-### 1. Start the Backend (Flask TTS Server)
-```bash
-cd backend
-# Set your Azure Speech Service credentials
-set AZURE_SPEECH_KEY=your_speech_key_here
-set AZURE_SPEECH_REGION=your_region_here
+## About The Project
+Nusakhata was born from a desire to keep the magic of Indonesian fairy tales alive in the digital age. These stories, passed down through generations, are more than just entertainment; they are vessels of culture, wisdom, and local identity. In a rapidly globalizing world, platforms like Nusakhata serve as a digital sanctuary for these invaluable cultural treasures.
 
-# Install dependencies if needed
-pip install flask flask-cors azure-cognitiveservices-speech
+This project was developed for GarudaHacks, with the theme: Create something that helps people connect through culture, language, or shared experiences.
 
-# Run the Flask server
-python app.py
-```
+We believe that stories are a powerful bridge. They connect us to our past, to our diverse cultures, and to each other. Nusakhata aims to be that bridge.
 
-### 2. Start the Frontend (Next.js)
-```bash
-cd frontend
-npm run dev
-```
+## Inclusivity at Our Core
+In the true spirit of "Bhinneka Tunggal Ika," diversity and unity are at the heart of Nusakhata. A key feature of our platform is Text-to-Speech (TTS) functionality. This isn't just an add-on; it's a commitment to accessibility. By enabling users to listen to the stories, we ensure that the magic of Indonesian folklore is accessible to everyone, including individuals with visual disabilities. Everyone deserves a seat at the fireside to hear these tales.
 
-### 3. Test the Integration
-1. Go to http://localhost:3000/dongeng
-2. Click on any dongeng story
-3. Select a voice from the dropdown
-4. Click "Dengarkan Dongeng" to hear the story
-
-## Voice Options Available:
-- **Ardi** - Indonesian Male Neural Voice
-- **Gadis** - Indonesian Female Neural Voice  
-- **Seraphina** - German Multilingual Neural Voice
-- **Remy** - French Dragon HD Latest Neural Voice
-
-## Features Implemented:
-✅ Send dongeng content to TTS backend
-✅ Voice selection with 4 different voices
-✅ Play/Pause functionality
-✅ Loading states and error handling
-✅ Server health checking
-✅ Clean content formatting for TTS
-✅ Audio cleanup on component unmount
-
-## API Endpoints:
-- `GET /health` - Check server status
-- `GET /voices` - Get available voices
-- `POST /synthesize-speech` - Convert text to speech
-
-## Required Environment Variables:
-- `AZURE_SPEECH_KEY` - Your Azure Speech Service key
-- `AZURE_SPEECH_REGION` - Your Azure region (e.g., "eastus")
